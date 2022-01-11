@@ -17,4 +17,17 @@ else
    echo "ElasticSearch is not running"
    /etc/init.d/elasticsearch restart
 fi
+##############################################################################################################################################
 
+
+
+php bin/magento maintenance:enable                                                                                                        
+rm -rf pub/static/* var/cache/* var/view_preprocessed/* generated/*                                     
+php bin/magento setup:upgrade                                                                           
+php bin/magento setup:di:compile                                                                        
+php bin/magento setup:static-content:deploy -j 6 -f               
+php bin/magento indexer:reindex
+php bin/magento cache:flush                                                                             
+php bin/magento cache:clean
+php bin/magento maintenance:disable
+#####################################################################################################
